@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData">
+    <serverData>
+      <paths name="FAREAST.v-bashi@GCRAZGDL483.redmond.corp.microsoft.com">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/v-bashi/projects/WSAL_VAR" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="v-bashi@msragpum08">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/data/1/v-bashi/projects/WSAL_VAR" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
