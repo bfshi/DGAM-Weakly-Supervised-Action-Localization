@@ -86,7 +86,7 @@ class WSAL_Model(nn.Module):
 ################################   Conditional VAE   #################################
 
 
-latent_size = config.DATASET.FEATURE_DIM
+latent_size = 256
 # condition_len = 1 #+ (config.DATASET.FEATURE_DIM + 1) * config.MODEL.CONDITION_FRAME_NUM
 
 class CEncoder(nn.Module):

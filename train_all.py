@@ -81,11 +81,11 @@ def main():
 
     # create a learning rate scheduler
     lr_scheduler_rgb = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer_rgb, mode='max', factor=0.3, patience=500 // config.TRAIN.TEST_EVERY_EPOCH,
+        optimizer_rgb, mode='max', factor=0.3, patience=300 // config.TRAIN.TEST_EVERY_EPOCH,
         verbose=True
     )
     lr_scheduler_flow = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer_flow, mode='max', factor=0.3, patience=500 // config.TRAIN.TEST_EVERY_EPOCH,
+        optimizer_flow, mode='max', factor=0.3, patience=300 // config.TRAIN.TEST_EVERY_EPOCH,
         verbose=True
     )
     lr_scheduler_cvae_rgb = torch.optim.lr_scheduler.MultiStepLR(
@@ -158,6 +158,16 @@ def main():
             best_perf = perf_indicator
             best_model_rgb.my_load_state_dict(model_rgb.state_dict(), strict=True)
 
+            logger.info("=> saving final result into {}".format(
+                os.path.join(config.OUTPUT_DIR, 'final_rgb_{}.pth'.format(best_perf))))
+            torch.save(best_model_rgb.state_dict(),
+                       os.path.join(config.OUTPUT_DIR, 'final_rgb_{}.pth'.format(best_perf)))
+
+            logger.info("=> saving final result into {}".format(
+                os.path.join(config.OUTPUT_DIR, 'final_flow_{}.pth'.format(best_perf))))
+            torch.save(best_model_flow.state_dict(),
+                       os.path.join(config.OUTPUT_DIR, 'final_flow_{}.pth'.format(best_perf)))
+
         # lr_scheduler_rgb.step(perf_indicator_rgb)
         # lr_scheduler_cvae_rgb.step()
 
@@ -175,18 +185,21 @@ def main():
             best_perf = perf_indicator
             best_model_flow.my_load_state_dict(model_flow.state_dict(), strict=True)
 
+            logger.info("=> saving final result into {}".format(
+                os.path.join(config.OUTPUT_DIR, 'final_rgb_{}.pth'.format(best_perf))))
+            torch.save(best_model_rgb.state_dict(),
+                       os.path.join(config.OUTPUT_DIR, 'final_rgb_{}.pth'.format(best_perf)))
+
+            logger.info("=> saving final result into {}".format(
+                os.path.join(config.OUTPUT_DIR, 'final_flow_{}.pth'.format(best_perf))))
+            torch.save(best_model_flow.state_dict(),
+                       os.path.join(config.OUTPUT_DIR, 'final_flow_{}.pth'.format(best_perf)))
+
+
         # lr_scheduler_flow.step(perf_indicator_flow)
         # lr_scheduler_cvae_flow.step()
 
-    logger.info("=> saving final result into {}".format(
-        os.path.join(config.OUTPUT_DIR, 'final_rgb_{}.pth'.format(best_perf))))
-    torch.save(best_model_rgb.state_dict(),
-               os.path.join(config.OUTPUT_DIR, 'final_rgb_{}.pth'.format(best_perf)))
 
-    logger.info("=> saving final result into {}".format(
-        os.path.join(config.OUTPUT_DIR, 'final_flow_{}.pth'.format(best_perf))))
-    torch.save(best_model_flow.state_dict(),
-               os.path.join(config.OUTPUT_DIR, 'final_flow_{}.pth'.format(best_perf)))
 
 
 

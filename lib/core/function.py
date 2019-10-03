@@ -49,7 +49,7 @@ def train(train_loader, model, cvae, optimizer, optimizer_cvae, epoch, epoch_num
             param.grad = None
 
         # training of vae
-        for hhh in range(1 * ((k + 1) % 5 == 0)):
+        for hhh in range(1):# * ((k + 1) % 5 == 0)):
             random.shuffle(train_list)
             for i, (video_feature, label) in enumerate(train_list):
                 # measure data loading time

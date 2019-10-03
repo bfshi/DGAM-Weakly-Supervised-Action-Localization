@@ -116,8 +116,8 @@ config.TRAIN.TEST_EVERY_EPOCH = 10
 
 config.TEST = edict()
 config.TEST.RESUME = True
-config.TEST.STATE_DICT_RGB = 'train/final_rgb_0.27749696356005515.pth'
-config.TEST.STATE_DICT_FLOW = 'train/final_flow_0.27749696356005515.pth'
+config.TEST.STATE_DICT_RGB = 'train/final_rgb_0.2406873050535973.pth'
+config.TEST.STATE_DICT_FLOW = 'train/final_flow_0.2406873050535973.pth'
 config.TEST.BATCH_SIZE = 1
 config.TEST.PRINT_EVERY_STEP = 1
 
