@@ -56,7 +56,31 @@ Under this formulation, we can optimize w.r.t. $\lambda$ and $\theta$ alternativ
 
 ### 如何解释$P(y | x, \lambda)$ 和 $P(x | \lambda)$ 的关系以及 $P(x | \lambda)$ 的作用？
 
-+ 从聚类的角度解释后者
++ 从聚类的角度解释后者（聚类可以降低entropy）
 + 前者只是解决了单个帧和类别的关系，并没有显式地建模帧与帧之间的关系（或者说帧本身的性质），而后者则会让选中的帧之间相互尽量相似。例如video_test_0001391中的25-27秒，描述的是一个人拿着标枪在地上走（视频的label是扔标枪），这个片段和label是很相关的，所以没有被分为背景，但这个片段的feature和扔标枪的动作（前景）的feature有很大差别，所以在加上$P(x | \lambda)$后就没有被选中。
 
 + 从generative model 和 discriminative model的角度？？
++ 可以在一个动作片段属于多个类别的时候，让不同类别之间的预测更加consistent？
++ 可以解决action-context separation的问题，因为很多context和对应的类别很相关，但是并不属于前景。
++ 和free energy principle有点类似，都是先去预测，然后再观测，最后根据观测和预测之间的区别（surprise）去更新模型
+
+
+
+### 有哪些重要参数可以拿来ablation study？
+
++ latent dimension（会影响重建以及生成质量）
++ CVAE中prior和condition的关联程度（会影响生成质量）
++ CVAE中kld_loss和recon_loss的比例（trade-off）
++ 新加的loss的系数
+
+
+
+### 可以统计哪些数据来支持motivation？
+
++ 那些分类分数高但前景分数低的帧占的比例，以及分类分数低但前景分数高的帧占的比例
+
+
+
+### 还可以添加哪些实验？
+
++ failure cases

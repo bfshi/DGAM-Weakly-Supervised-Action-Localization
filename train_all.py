@@ -4,7 +4,9 @@ from __future__ import print_function
 
 import os
 import pprint
+import random
 
+import numpy as np
 import torch
 import torch.nn.parallel
 import torch.backends.cudnn as cudnn
@@ -37,6 +39,24 @@ def main():
 
     # logging configurations
     logger.info(pprint.pformat(config))
+
+    # random seed
+    if config.IF_DETERMINISTIC:
+        torch.manual_seed(config.RANDOM_SEED_TORCH)
+        # config.CUDNN.DETERMINISTIC = True
+        # config.CUDNN.BENCHMARK = False
+        np.random.seed(config.RANDOM_SEED_NUMPY)
+        random.seed(config.RANDOM_SEED_RANDOM)
+    else:
+        logger.info('torch random seed: {}'.format(torch.initial_seed()))
+
+        seed = random.randint(0, 2**32)
+        np.random.seed(seed)
+        logger.info('numpy random seed: {}'.format(seed))
+
+        seed = random.randint(0, 2**32)
+        random.seed(seed)
+        logger.info('random random seed: {}'.format(seed))
 
     # cudnn related setting
     cudnn.benchmark = config.CUDNN.BENCHMARK
@@ -80,21 +100,21 @@ def main():
     optimizer_cvae_flow = create_optimizer(config, cvae_flow)
 
     # create a learning rate scheduler
-    lr_scheduler_rgb = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer_rgb, mode='max', factor=0.3, patience=300 // config.TRAIN.TEST_EVERY_EPOCH,
-        verbose=True
+    lr_scheduler_rgb = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer_rgb, T_max=(config.TRAIN.END_EPOCH - config.TRAIN.BEGIN_EPOCH) // config.TRAIN.TEST_EVERY_EPOCH,
+        eta_min=config.TRAIN.LR / 10
     )
-    lr_scheduler_flow = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer_flow, mode='max', factor=0.3, patience=300 // config.TRAIN.TEST_EVERY_EPOCH,
-        verbose=True
+    lr_scheduler_flow = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer_flow, T_max=(config.TRAIN.END_EPOCH - config.TRAIN.BEGIN_EPOCH) // config.TRAIN.TEST_EVERY_EPOCH,
+        eta_min=config.TRAIN.LR / 10
     )
-    lr_scheduler_cvae_rgb = torch.optim.lr_scheduler.MultiStepLR(
-        optimizer_cvae_rgb, config.TRAIN.LR_MILESTONES,
-        config.TRAIN.LR_DECAY_RATE
+    lr_scheduler_cvae_rgb = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer_cvae_rgb, T_max=(config.TRAIN.END_EPOCH - config.TRAIN.BEGIN_EPOCH) // config.TRAIN.TEST_EVERY_EPOCH,
+        eta_min=config.TRAIN.LR / 10
     )
-    lr_scheduler_cvae_flow = torch.optim.lr_scheduler.MultiStepLR(
-        optimizer_cvae_flow, config.TRAIN.LR_MILESTONES,
-        config.TRAIN.LR_DECAY_RATE
+    lr_scheduler_cvae_flow = torch.optim.lr_scheduler.CosineAnnealingLR(
+        optimizer_cvae_flow, T_max=(config.TRAIN.END_EPOCH - config.TRAIN.BEGIN_EPOCH) // config.TRAIN.TEST_EVERY_EPOCH,
+        eta_min=config.TRAIN.LR / 10
     )
 
     # load data
@@ -168,7 +188,7 @@ def main():
             torch.save(best_model_flow.state_dict(),
                        os.path.join(config.OUTPUT_DIR, 'final_flow_{}.pth'.format(best_perf)))
 
-        # lr_scheduler_rgb.step(perf_indicator_rgb)
+        # lr_scheduler_rgb.step(perf_indicator)
         # lr_scheduler_cvae_rgb.step()
 
 
@@ -196,7 +216,7 @@ def main():
                        os.path.join(config.OUTPUT_DIR, 'final_flow_{}.pth'.format(best_perf)))
 
 
-        # lr_scheduler_flow.step(perf_indicator_flow)
+        # lr_scheduler_flow.step(perf_indicator)
         # lr_scheduler_cvae_flow.step()
 
 

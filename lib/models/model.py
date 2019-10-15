@@ -86,8 +86,8 @@ class WSAL_Model(nn.Module):
 ################################   Conditional VAE   #################################
 
 
-latent_size = 256
-# condition_len = 1 #+ (config.DATASET.FEATURE_DIM + 1) * config.MODEL.CONDITION_FRAME_NUM
+latent_size = 128
+# condition_len = 1 + (config.DATASET.FEATURE_DIM + 1) * config.MODEL.CONDITION_FRAME_NUM
 
 class CEncoder(nn.Module):
     def __init__(self):
@@ -155,7 +155,7 @@ class CVAE(nn.Module):
             return means, log_var, z, recon_x
         elif mode == 'inference':
             att = att.view(-1, config.DATASET.NUM_SEGMENTS)
-            z = torch.randn((*att.shape, latent_size), device='cuda')
+            z = torch.randn((*att.shape, latent_size), device='cuda') + att.view(-1, config.DATASET.NUM_SEGMENTS, 1)
             # z = torch.randn((*att.shape, latent_size)).cuda()
             recon_x = self.cdecoder(z, att)
 

@@ -16,6 +16,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="v-bashi@msragpum09">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/v-bashi/projects/WSAL_VAR" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
     </serverData>
   </component>
 </project>

@@ -91,7 +91,7 @@ def loss_ising(attention):
     return (attention[:, 1:] - attention[:, :-1]).pow(2).mean()
 
 
-def loss_cvae(recon_x, x, mean, log_var):
+def loss_cvae(recon_x, x, mean, log_var, attention):
     """
     loss of conditional-VAE
     :param recon_x: reconstructed x
@@ -102,7 +102,7 @@ def loss_cvae(recon_x, x, mean, log_var):
     """
     recon_x = recon_x.view(-1, config.DATASET.FEATURE_DIM)
     x = x.view(-1, config.DATASET.FEATURE_DIM)
-    mean = mean.view(-1, mean.shape[-1])
+    mean = (mean - attention).view(-1, mean.shape[-1])
     log_var = log_var.view(-1, log_var.shape[-1])
 
     mse = (x - recon_x).pow(2).mean()
@@ -111,4 +111,4 @@ def loss_cvae(recon_x, x, mean, log_var):
     logger.info(mse)
     logger.info(kld)
 
-    return 0.01 * kld + 1 * mse
+    return 0.1 * kld + 1 * mse

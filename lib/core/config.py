@@ -5,9 +5,12 @@ from __future__ import print_function
 import os
 import csv
 import sys
+import random
 
 import numpy as np
+import torch
 from easydict import EasyDict as edict
+import logging
 
 
 
@@ -23,6 +26,10 @@ config.GPUS = '0'
 config.GPU_NUM = 1  # number of gpus in config.GPUS
 config.WORKERS = 4
 config.MODE = 'train'  # train / test
+config.IF_DETERMINISTIC = True  # whether to set all functions deterministic (for reproducibility)
+config.RANDOM_SEED_TORCH = 1024
+config.RANDOM_SEED_NUMPY = 1024
+config.RANDOM_SEED_RANDOM = 1024
 
 
 
@@ -37,7 +44,7 @@ config.CUDNN.ENABLED = True
 
 # dataset related configs
 
-config.DATASET_NAME = 'ActivityNet12'  # THUMOS14 / ActivityNet12
+config.DATASET_NAME = 'THUMOS14'  # THUMOS14 / ActivityNet12
 
 if config.DATASET_NAME == 'THUMOS14':
     config.DATASET = edict()
@@ -82,7 +89,7 @@ if config.DATASET_NAME == 'ActivityNet12':
 
 config.MODEL = edict()
 
-# config.MODEL.CONDITION_FRAME_NUM = 0
+# config.MODEL.CONDITION_FRAME_NUM = 1
 
 
 
@@ -95,13 +102,14 @@ config.TRAIN.RESUME_FLOW = False
 config.TRAIN.STATE_DICT_RGB = 'train/baseline_rgb_0.1365483161624871.pth'
 config.TRAIN.STATE_DICT_FLOW = 'train/checkpoint_flow_0.24359359838273537.pth'
 
-config.TRAIN.OPTIMIZER = 'adam'  # sgd / adam
+config.TRAIN.OPTIMIZER = 'adam'  # sgd / adam / radam
 config.TRAIN.LR = 0.001
 config.TRAIN.LR_DECAY_RATE = 0.5
 config.TRAIN.LR_MILESTONES = []  # at which epoch lr decays
 config.TRAIN.MOMENTUM = 0.9
 config.TRAIN.WD = 0.0001
 config.TRAIN.NESTEROV = False
+config.TRAIN.BETA = (0.8, 0.999)
 
 config.TRAIN.BEGIN_EPOCH = 0
 config.TRAIN.END_EPOCH = 6000
@@ -116,8 +124,8 @@ config.TRAIN.TEST_EVERY_EPOCH = 10
 
 config.TEST = edict()
 config.TEST.RESUME = True
-config.TEST.STATE_DICT_RGB = 'train/final_rgb_0.2406873050535973.pth'
-config.TEST.STATE_DICT_FLOW = 'train/final_flow_0.2406873050535973.pth'
+config.TEST.STATE_DICT_RGB = 'train/final_rgb_0.30033835819381227.pth'
+config.TEST.STATE_DICT_FLOW = 'train/final_flow_0.30033835819381227.pth'
 config.TEST.BATCH_SIZE = 1
 config.TEST.PRINT_EVERY_STEP = 1
 
@@ -146,6 +154,8 @@ def extra():
     config.TRAIN.STATE_DICT_FLOW = os.path.join('experiments/', config.DATASET_NAME, config.TRAIN.STATE_DICT_FLOW)
     config.TEST.STATE_DICT_RGB = os.path.join('experiments/', config.DATASET_NAME, config.TEST.STATE_DICT_RGB)
     config.TEST.STATE_DICT_FLOW = os.path.join('experiments/', config.DATASET_NAME, config.TEST.STATE_DICT_FLOW)
+
+
 
 
 

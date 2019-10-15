@@ -79,7 +79,7 @@ def train(train_loader, model, cvae, optimizer, optimizer_cvae, epoch, epoch_num
                     means, log_var, z, recon_feature = cvae('forward', video_feature, attention)
 
                     # compute loss of cvae
-                    loss += loss_cvae(recon_feature, video_feature, means, log_var)
+                    loss += loss_cvae(recon_feature, video_feature, means, log_var, attention)
 
                 loss /= cvae_sample_num
                 loss *= 10
@@ -179,7 +179,7 @@ def train(train_loader, model, cvae, optimizer, optimizer_cvae, epoch, epoch_num
                 logger.info(l_ising)
 
                 if config.DATASET_NAME == 'THUMOS14':
-                    loss2 = 1 * l_fg + 0.03 * l_bg + 0.1 * l_guide + 0.7 * l_recon
+                    loss2 = 1 * l_fg + 0.03 * l_bg + 0.1 * l_guide + 0.5 * l_recon
                 elif config.DATASET_NAME == 'ActivityNet12':
                     if modality == 'rgb':
                         loss2 = 1 * l_fg + 1 * l_bg + 0.1 * l_guide + 0.7 * l_recon

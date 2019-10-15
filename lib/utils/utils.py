@@ -11,6 +11,7 @@ from PIL import Image
 import json
 import re
 import sys
+import math
 
 import numpy as np
 import scipy as sp
@@ -28,6 +29,7 @@ from torch._six import container_abcs, string_classes, int_classes
 
 import _init_paths
 from core.config import config
+from utils.RAdam import RAdam
 
 NUM_SEGMENTS = config.DATASET.NUM_SEGMENTS
 SAMPLING_FRAMES = config.DATASET.SAMPLING_FRAMES
@@ -56,7 +58,14 @@ def create_optimizer(cfg, model):
     elif cfg.TRAIN.OPTIMIZER == 'adam':
         optimizer = optim.Adam(
             model.parameters(),
-            lr=cfg.TRAIN.LR
+            lr=cfg.TRAIN.LR,
+            betas=cfg.TRAIN.BETA
+        )
+    elif cfg.TRAIN.OPTIMIZER == 'radam':
+        optimizer = RAdam(
+            model.parameters(),
+            lr=cfg.TRAIN.LR,
+            betas=cfg.TRAIN.BETA
         )
 
     return optimizer
@@ -342,6 +351,41 @@ def inf_progress(iteration, total, prefix='', suffix='', decimals=1, barLength=1
     if iteration == total:
         sys.stdout.write('\n')
     sys.stdout.flush()
+
+
+def get_1D_gaussian_fitler(kernel_size=5, sigma=1):
+    """
+    create a 1D gaussian filter.
+    Note that since 1D_Conv operates on the last dimension of a tensor,
+    the target dimension needs to be exchanged to the last one.
+    :param kernel_size: gaussian kernel size
+    :param sigma: standard variation
+    :return: gaussian filter
+    """
+    weight = torch.zeros((kernel_size,))
+    for i in range(kernel_size):
+        weight[i] = 1 / ((2 * math.pi)**0.5 * sigma) *\
+                    np.exp(-(i - (kernel_size - 1) / 2)**2 / (2 * sigma**2))
+    weight = weight / weight.sum()
+    weight = weight.view(1, 1, kernel_size)
+
+    gaussian_filter = nn.Conv1d(in_channels=1, out_channels=1, kernel_size=kernel_size,
+                                stride=1, padding=(kernel_size - 1) // 2, bias=False)
+    gaussian_filter.weight.data = weight
+    gaussian_filter.weight.requires_grad = False
+    gaussian_filter = gaussian_filter.cuda()
+
+    return gaussian_filter
+
+
+# gaussian_filter = get_1D_gaussian_fitler()
+gaussian_filter = None
+
+def gaussian_filtering(tensor):
+    tensor = tensor.transpose(1, 2)
+    shape = tensor.shape
+    return gaussian_filter(tensor.reshape((-1, 1, shape[2]))).reshape(shape).transpose(1, 2)
+
 
 
 def bar_figure(data_series):
