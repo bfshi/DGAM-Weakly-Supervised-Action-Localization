@@ -26,7 +26,7 @@ config.GPUS = '0'
 config.GPU_NUM = 1  # number of gpus in config.GPUS
 config.WORKERS = 4
 config.MODE = 'train'  # train / test
-config.IF_DETERMINISTIC = False  # whether to set all functions deterministic (for reproducibility)
+config.IF_DETERMINISTIC = True  # whether to set all functions deterministic (for reproducibility)
 config.RANDOM_SEED_TORCH = 4995387260619361098
 config.RANDOM_SEED_NUMPY = 893425999
 config.RANDOM_SEED_RANDOM = 3960158340
@@ -89,7 +89,6 @@ if config.DATASET_NAME == 'ActivityNet12':
 
 config.MODEL = edict()
 
-# config.MODEL.PRIOR_ATT_RATIO = 1.
 
 
 
@@ -102,7 +101,7 @@ config.TRAIN.RESUME_FLOW = False
 config.TRAIN.STATE_DICT_RGB = 'train/baseline_rgb_0.1365483161624871.pth'
 config.TRAIN.STATE_DICT_FLOW = 'train/checkpoint_flow_0.24359359838273537.pth'
 
-config.TRAIN.OPTIMIZER = 'adam'  # sgd / adam / radam
+config.TRAIN.OPTIMIZER = 'adam'  # sgd / adam
 config.TRAIN.LR = 0.001
 config.TRAIN.LR_DECAY_RATE = 0.5
 config.TRAIN.LR_MILESTONES = []  # at which epoch lr decays

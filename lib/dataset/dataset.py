@@ -2,11 +2,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import json
-import csv
-import cv2
 import os
-import glob
 
 import numpy as np
 import torch

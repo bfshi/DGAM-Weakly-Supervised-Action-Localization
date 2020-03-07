@@ -46,12 +46,10 @@ def main():
     model_rgb = create_model()
     model_rgb.my_load_state_dict(torch.load(config.TEST.STATE_DICT_RGB), strict=True)
     model_rgb = model_rgb.cuda(gpus[0])
-    # model_rgb = torch.nn.DataParallel(model_rgb, device_ids=gpus)
 
     model_flow = create_model()
     model_flow.my_load_state_dict(torch.load(config.TEST.STATE_DICT_FLOW), strict=True)
     model_flow = model_flow.cuda(gpus[0])
-    # model_flow = torch.nn.DataParallel(model_flow, device_ids=gpus)
 
     # load data
     test_dataset_rgb = get_dataset(mode='test', modality='rgb')

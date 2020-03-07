@@ -2,14 +2,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import os
 import logging
 import time
 from pathlib import Path
-import cv2
-from PIL import Image
 import json
-import re
 import sys
 import math
 
@@ -29,7 +25,6 @@ from torch._six import container_abcs, string_classes, int_classes
 
 import _init_paths
 from core.config import config
-from utils.RAdam import RAdam
 
 NUM_SEGMENTS = config.DATASET.NUM_SEGMENTS
 SAMPLING_FRAMES = config.DATASET.SAMPLING_FRAMES
@@ -57,12 +52,6 @@ def create_optimizer(cfg, model):
         )
     elif cfg.TRAIN.OPTIMIZER == 'adam':
         optimizer = optim.Adam(
-            model.parameters(),
-            lr=cfg.TRAIN.LR,
-            betas=cfg.TRAIN.BETA
-        )
-    elif cfg.TRAIN.OPTIMIZER == 'radam':
-        optimizer = RAdam(
             model.parameters(),
             lr=cfg.TRAIN.LR,
             betas=cfg.TRAIN.BETA
@@ -197,8 +186,6 @@ def interpolated_wtCAM(wT, scale):
     Interpolate the wtCAM signals and threshold
     """
     final_wT = upgrade_resolution(wT, scale)
-    # result_zero = np.where(final_wT[:, :, 0] < 0.05)
-    # final_wT[result_zero] = 0
     return final_wT
 
 
@@ -210,12 +197,9 @@ def get_tempseg_list(wtcam, c_len, attention, thr=0.05):
     for i in range(c_len):
         if config.DATASET_NAME == 'THUMOS14':
             pos = np.where((0.8 * wtcam[:, i, 0] + 0.2 * attention[:, 0] * attention[:, 0]) > thr)
-            # pos = np.where((0.5 * wtcam[:, i, 0] + 0.5 * attention[:, 0] * attention[:, 0]) > thr)
         elif config.DATASET_NAME == 'ActivityNet12':
             pos = np.where(gaussian_filter1d((0.8 * wtcam[:, i, 0] + 0.2 * attention[:, 0] * attention[:, 0]),
                                              sigma=25) > thr)
-        # pos = np.where(gaussian_filter1d((0.8 * wtcam[:, i, 0] + 0.2 * attention[:, 0] * attention[:, 0]),
-        #                                  sigma=25) > thr)
         temp_list = pos
         temp.append(temp_list)
     return temp
@@ -256,7 +240,6 @@ def get_temp_proposal(tList, wtcam, attention, c_pred, scale, v_len):
                     c_right_outer = np.mean(wtcam[right_outer_list, i, 1])
                 else:
                     c_right_outer = 0
-                # print(left_outer_list, right_outer_list, grouped_temp_list[j])
                 c_score = np.mean(wtcam[grouped_temp_list[j], i, 1]) - 0.3 * (c_left_outer + c_right_outer)
                 # c_score = np.mean(wtcam[grouped_temp_list[j], i, 1])
                 t_start = grouped_temp_list[j][0] * t_factor
@@ -379,7 +362,6 @@ def get_1D_gaussian_fitler(kernel_size=5, sigma=1):
     return gaussian_filter
 
 
-# gaussian_filter = get_1D_gaussian_fitler()
 gaussian_filter = None
 
 def gaussian_filtering(tensor):

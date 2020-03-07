@@ -42,25 +42,12 @@ class Att_Head(nn.Module):
         return x
 
 
-class Cluster_Head(nn.Module):
-    def __init__(self):
-        super(Cluster_Head, self).__init__()
-
-        self.u_fg = nn.Linear(config.DATASET.FEATURE_DIM, 1)
-        self.u_bg = nn.Linear(config.DATASET.FEATURE_DIM, 1)
-
-    def forward(self, feature_fg, feature_bg):
-        return [self.u_fg(feature_fg) - self.u_bg(feature_fg), self.u_bg(feature_bg) - self.u_fg(feature_bg)]
-
-
-
 class WSAL_Model(nn.Module):
     def __init__(self):
         super(WSAL_Model, self).__init__()
 
         self.clf_head = Clf_Head()
         self.att_head = Att_Head()
-        self.cluster_head = Cluster_Head()
 
     def my_load_state_dict(self, state_dict_old, strict=True):
         state_dict = OrderedDict()
@@ -72,22 +59,18 @@ class WSAL_Model(nn.Module):
 
     def forward(self, x, mode):
         """
-        mode: 'clf' / 'att' / 'cluster'
+        mode: 'clf' / 'att'
         """
         if mode == 'clf':
             return self.clf_head(x)
         elif mode == 'att':
             return self.att_head(x)
-        elif mode == 'cluster':
-            # x: [feature_fg, feature_bg]
-            return self.cluster_head(x[0], x[1])
 
 
 ################################   Conditional VAE   #################################
 
 
 latent_size = 128
-# condition_len = 1 + (config.DATASET.FEATURE_DIM + 1) * config.MODEL.CONDITION_FRAME_NUM
 
 class CEncoder(nn.Module):
     def __init__(self):
@@ -147,7 +130,6 @@ class CVAE(nn.Module):
 
             std = torch.exp(0.5 * log_var)
             eps = torch.randn(means.shape, device='cuda')
-            # eps = torch.randn(means.shape).cuda()
             z = means + eps * std
 
             recon_x = self.cdecoder(z, att)
@@ -156,7 +138,6 @@ class CVAE(nn.Module):
         elif mode == 'inference':
             att = att.view(-1, config.DATASET.NUM_SEGMENTS)
             z = torch.randn((*att.shape, latent_size), device='cuda') + att.view(-1, config.DATASET.NUM_SEGMENTS, 1)
-            # z = torch.randn((*att.shape, latent_size)).cuda()
             recon_x = self.cdecoder(z, att)
 
             return recon_x

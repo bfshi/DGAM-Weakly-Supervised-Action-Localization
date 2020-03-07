@@ -19,8 +19,6 @@ import _init_paths
 from core.config import config
 from core.config import extra
 from core.function import train
-from core.function import train_adv
-from core.function import test
 from core.function import test_final
 from dataset.dataset import get_dataset
 from models.model import create_model, create_cvae
@@ -64,11 +62,7 @@ def main():
     torch.backends.cudnn.enabled = config.CUDNN.ENABLED
 
     # create a model
-    # print(os.environ["CUDA_VISIBLE_DEVICES"])
-    # os.environ["CUDA_VISIBLE_DEVICES"] = config.GPUS
-    # print(os.environ["CUDA_VISIBLE_DEVICES"])
     gpus = [int(i) for i in config.GPUS.split(',')]
-    # gpus = range(gpus.__len__())
 
     model_rgb = create_model()
     if config.TRAIN.RESUME_RGB:
