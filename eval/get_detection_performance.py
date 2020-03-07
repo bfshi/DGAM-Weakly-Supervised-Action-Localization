@@ -10,6 +10,8 @@ warnings.filterwarnings("ignore", message="numpy.dtype size changed")
 warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
 
 from eval_detection import ANETdetection
+import _init_paths
+from lib.core.config import config
 
 tiou_thre_dict = {'THUMOS14': np.linspace(0.1, 0.9, 9),
                    'ActivityNet12': np.linspace(0.5, 0.95, 10)}
@@ -23,7 +25,7 @@ def main(ground_truth_filename, prediction_filename,
 
     anet_detection = ANETdetection(ground_truth_filename, prediction_filename,
                                    subset=subset, tiou_thresholds=tiou_thresholds,
-                                   verbose=verbose, check_status=True)
+                                   verbose=verbose, check_status=(config.DATASET_NAME == 'ActivityNet12'))
     anet_detection.evaluate()
 
 def eval_mAP(ground_truth_filename, prediction_filename,
@@ -31,7 +33,7 @@ def eval_mAP(ground_truth_filename, prediction_filename,
          verbose=True, check_status=True):
     anet_detection = ANETdetection(ground_truth_filename, prediction_filename,
                                    subset=subset, tiou_thresholds=tiou_thresholds,
-                                   verbose=verbose, check_status=True)
+                                   verbose=verbose, check_status=(config.DATASET_NAME == 'ActivityNet12'))
     return anet_detection.evaluate()
 
 def parse_input():

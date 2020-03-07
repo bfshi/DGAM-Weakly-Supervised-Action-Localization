@@ -20,6 +20,7 @@ from core.function import test_final
 from dataset.dataset import get_dataset
 from models.model import create_model
 from utils.utils import create_logger
+from eval.get_detection_performance import eval_mAP
 
 def main():
     # convert to train mode
@@ -71,7 +72,8 @@ def main():
         pin_memory=True
     )
 
-    test_final(test_dataset_rgb, model_rgb, test_dataset_flow, model_flow)
+    result_file_path = test_final(test_dataset_rgb, model_rgb, test_dataset_flow, model_flow)
+    eval_mAP(config.DATASET.GT_JSON_PATH, result_file_path)
     # test_final(None, None, test_dataset_flow, model_flow)
     # test_final(test_dataset_rgb, model_rgb, None, None)
 

@@ -82,7 +82,7 @@ def train(train_loader, model, cvae, optimizer, optimizer_cvae, epoch, epoch_num
                     loss += loss_cvae(recon_feature, video_feature, means, log_var, attention)
 
                 loss /= cvae_sample_num
-                loss *= 10
+                loss *= (10 * min(epoch, 300) / 300)
 
                 # back prop
                 optimizer_cvae.zero_grad()
@@ -179,12 +179,15 @@ def train(train_loader, model, cvae, optimizer, optimizer_cvae, epoch, epoch_num
                 logger.info(l_ising)
 
                 if config.DATASET_NAME == 'THUMOS14':
-                    loss2 = 1 * l_fg + 0.03 * l_bg + 0.1 * l_guide + 0.5 * l_recon
+                    if modality == 'rgb':
+                        loss2 = 1.5 * l_fg + 0.03 * l_bg + 0.1 * l_guide + min(epoch, 300) / 300 * 0.5 * l_recon
+                    elif modality == 'flow':
+                        loss2 = 1 * l_fg + 0.03 * l_bg + 0.1 * l_guide + min(epoch, 300) / 300 * 0.3 * l_recon
                 elif config.DATASET_NAME == 'ActivityNet12':
                     if modality == 'rgb':
-                        loss2 = 1 * l_fg + 1 * l_bg + 0.1 * l_guide + 0.7 * l_recon
+                        loss2 = 1 * l_fg + 1 * l_bg + 0.1 * l_guide + 0.1 * l_recon
                     elif modality == 'flow':
-                        loss2 = 0.3 * l_fg + 1 * l_bg + 0.1 * l_guide + 0.7 * l_recon
+                        loss2 = 0.3 * l_fg + 1 * l_bg + 0.1 * l_guide + 0.1 * l_recon
 
                 # back prop
                 optimizer.zero_grad()
@@ -355,7 +358,7 @@ def test_final(test_dataset_rgb, model_rgb, test_dataset_flow, model_flow, tb_wr
                     # Get segment list of rgb_int_wtCam
                     rgb_temp_idx = get_tempseg_list(rgb_int_wtCam, len(rgb_class_prediction), rgb_int_attention, thr=config.TEST.TEMPSEG_LIST_THR_RGB)
                     # Temporal Proposal
-                    rgb_temp_prop = get_temp_proposal(rgb_temp_idx, rgb_int_wtCam, rgb_class_prediction,
+                    rgb_temp_prop = get_temp_proposal(rgb_temp_idx, rgb_int_wtCam, rgb_int_attention, rgb_class_prediction,
                                                        scale, vid_len)
 
 
@@ -387,7 +390,7 @@ def test_final(test_dataset_rgb, model_rgb, test_dataset_flow, model_flow, tb_wr
                     # Get segment list of flow_int_wtCam
                     flow_temp_idx = get_tempseg_list(flow_int_wtCam, len(flow_class_prediction), flow_int_attention, thr=config.TEST.TEMPSEG_LIST_THR_FLOW)
                     # Temporal Proposal
-                    flow_temp_prop = get_temp_proposal(flow_temp_idx, flow_int_wtCam, flow_class_prediction,
+                    flow_temp_prop = get_temp_proposal(flow_temp_idx, flow_int_wtCam, flow_int_attention, flow_class_prediction,
                                                        scale, vid_len)
 
 

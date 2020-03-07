@@ -26,10 +26,10 @@ config.GPUS = '0'
 config.GPU_NUM = 1  # number of gpus in config.GPUS
 config.WORKERS = 4
 config.MODE = 'train'  # train / test
-config.IF_DETERMINISTIC = True  # whether to set all functions deterministic (for reproducibility)
-config.RANDOM_SEED_TORCH = 1024
-config.RANDOM_SEED_NUMPY = 1024
-config.RANDOM_SEED_RANDOM = 1024
+config.IF_DETERMINISTIC = False  # whether to set all functions deterministic (for reproducibility)
+config.RANDOM_SEED_TORCH = 4995387260619361098
+config.RANDOM_SEED_NUMPY = 893425999
+config.RANDOM_SEED_RANDOM = 3960158340
 
 
 
@@ -89,7 +89,7 @@ if config.DATASET_NAME == 'ActivityNet12':
 
 config.MODEL = edict()
 
-# config.MODEL.CONDITION_FRAME_NUM = 1
+# config.MODEL.PRIOR_ATT_RATIO = 1.
 
 
 
@@ -124,8 +124,8 @@ config.TRAIN.TEST_EVERY_EPOCH = 10
 
 config.TEST = edict()
 config.TEST.RESUME = True
-config.TEST.STATE_DICT_RGB = 'train/final_rgb_0.30033835819381227.pth'
-config.TEST.STATE_DICT_FLOW = 'train/final_flow_0.30033835819381227.pth'
+config.TEST.STATE_DICT_RGB = 'train/final_rgb_0.2943646609641817.pth'
+config.TEST.STATE_DICT_FLOW = 'train/final_flow_0.2943646609641817.pth'
 config.TEST.BATCH_SIZE = 1
 config.TEST.PRINT_EVERY_STEP = 1
 

@@ -210,6 +210,7 @@ def get_tempseg_list(wtcam, c_len, attention, thr=0.05):
     for i in range(c_len):
         if config.DATASET_NAME == 'THUMOS14':
             pos = np.where((0.8 * wtcam[:, i, 0] + 0.2 * attention[:, 0] * attention[:, 0]) > thr)
+            # pos = np.where((0.5 * wtcam[:, i, 0] + 0.5 * attention[:, 0] * attention[:, 0]) > thr)
         elif config.DATASET_NAME == 'ActivityNet12':
             pos = np.where(gaussian_filter1d((0.8 * wtcam[:, i, 0] + 0.2 * attention[:, 0] * attention[:, 0]),
                                              sigma=25) > thr)
@@ -227,7 +228,7 @@ def grouping(arr):
     return np.split(arr, np.where(np.diff(arr) != 1)[0] + 1)
 
 
-def get_temp_proposal(tList, wtcam, c_pred, scale, v_len):
+def get_temp_proposal(tList, wtcam, attention, c_pred, scale, v_len):
     """
     Get the temporal proposal
     """

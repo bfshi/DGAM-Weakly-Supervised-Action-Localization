@@ -19,7 +19,7 @@ def main(ground_truth_filename, prediction_filename,
 
     anet_detection = ANETdetection(ground_truth_filename, prediction_filename,
                                    subset=subset, tiou_thresholds=tiou_thresholds,
-                                   verbose=verbose, check_status=True)
+                                   verbose=verbose, check_status=False)#(config.DATASET_NAME == 'ActivityNet12'))
     anet_detection.evaluate()
 
 def eval_mAP(ground_truth_filename, prediction_filename,
@@ -27,7 +27,7 @@ def eval_mAP(ground_truth_filename, prediction_filename,
          verbose=True, check_status=True):
     anet_detection = ANETdetection(ground_truth_filename, prediction_filename,
                                    subset=subset, tiou_thresholds=tiou_thresholds,
-                                   verbose=verbose, check_status=True)
+                                   verbose=verbose, check_status=False)#(config.DATASET_NAME == 'ActivityNet12'))
     return anet_detection.evaluate()
 
 def parse_input():

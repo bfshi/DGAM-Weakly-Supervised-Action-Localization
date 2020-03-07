@@ -68,10 +68,11 @@ Under this formulation, we can optimize w.r.t. $\lambda$ and $\theta$ alternativ
 
 ### 有哪些重要参数可以拿来ablation study？
 
-+ latent dimension（会影响重建以及生成质量）
-+ CVAE中prior和condition的关联程度（会影响生成质量）
-+ CVAE中kld_loss和recon_loss的比例（trade-off）
-+ 新加的loss的系数
++ latent dimension（会影响重建以及生成质量）（见Experiments-2019.10.7）
++ CVAE中prior和condition的关联程度（会影响生成质量）（见Experiments-2019.10.23）
++ CVAE中kld_loss和recon_loss的比例（trade-off）（见Experiments-2019.10.7）
++ $l_{recon}$的系数（rgb和flow的系数可以不同）（见Experiments-2019.10.17）
++ $l_{bg}$的系数
 
 
 

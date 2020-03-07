@@ -43,8 +43,8 @@ def main():
     # random seed
     if config.IF_DETERMINISTIC:
         torch.manual_seed(config.RANDOM_SEED_TORCH)
-        # config.CUDNN.DETERMINISTIC = True
-        # config.CUDNN.BENCHMARK = False
+        config.CUDNN.DETERMINISTIC = True
+        config.CUDNN.BENCHMARK = False
         np.random.seed(config.RANDOM_SEED_NUMPY)
         random.seed(config.RANDOM_SEED_RANDOM)
     else:
@@ -218,7 +218,6 @@ def main():
 
         # lr_scheduler_flow.step(perf_indicator)
         # lr_scheduler_cvae_flow.step()
-
 
 
 
