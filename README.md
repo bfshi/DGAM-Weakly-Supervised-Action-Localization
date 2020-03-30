@@ -1,5 +1,5 @@
 # DGAM-Weakly-Supervised-Action-Localization
-Code for our paper "Weakly-Supervised Action Localization by Generative Attention Modeling" by [Baifeng Shi](https://bfshi.github.io), 
+Code for our paper "[Weakly-Supervised Action Localization by Generative Attention Modeling](https://arxiv.org/abs/2003.12424)" by [Baifeng Shi](https://bfshi.github.io), 
 [Qi Dai](https://scholar.google.com/citations?hl=en&user=NSJY12IAAAAJ), [Yadong Mu](http://www.muyadong.com/index.html),
 [Jingdong Wang](https://jingdongwang2017.github.io/), **CVPR2020**.
 
