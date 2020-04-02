@@ -27,3 +27,14 @@ then run:
 ```bash
 python test.py
 ```
+
+## Citation
+If you find our code useful, please consider citing:
+```
+@article{shi2020weakly,
+  title={Weakly-Supervised Action Localization by Generative Attention Modeling},
+  author={Shi, Baifeng and Dai, Qi and Mu, Yadong and Wang, Jingdong},
+  journal={arXiv preprint arXiv:2003.12424},
+  year={2020}
+}
+```
