@@ -10,8 +10,8 @@ pip install -r requirements.txt
 ```
 
 ## Dataset
-We provide extracted features and corresponsing annotations for THUMOS14 (available [here](https://drive.google.com/open?id=17gVgnI1JC6ktxBVvL7iDW5Sl6Ga4-9Bo))
-and ActivityNet1.2 ([here](https://drive.google.com/open?id=1zDWKV6tM4NTEJPItOxq0Q-zCa42HopAG)). 
+We provide extracted features and corresponsing annotations for THUMOS14 (available [here](https://drive.google.com/open?id=1SuyUdug6bb5HG0rnpDkdyIVdVp119LcV))
+and ActivityNet1.2 ([here](https://drive.google.com/open?id=1zwdF72z_y5TWAAHyZyMVcU6Bz_KFv5oL)). 
 
 Before running the code, please download the target dataset and unzip it under `/data`.
 
