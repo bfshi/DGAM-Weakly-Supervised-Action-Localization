@@ -20,9 +20,9 @@ You can train your own model by running:
 ```bash
 python train_all.py
 ```
-Note that you can configure the hyperparameters in `/lib/config/config.py`.
+Note that you can configure the hyperparameters in `/lib/core/config.py`.
 
-To test your model, you shall first go to the file `/lib/config/config.py` and change the entries `config.TEST.STATE_DICT_RGB` and `config.TEST.STATE_DICT_FLOW`,
+To test your model, you shall first go to the file `/lib/core/config.py` and change the entries `config.TEST.STATE_DICT_RGB` and `config.TEST.STATE_DICT_FLOW`,
 then run:
 ```bash
 python test.py
