@@ -10,10 +10,10 @@ pip install -r requirements.txt
 ```
 
 ## Dataset
-We provide extracted features and corresponsing annotations for THUMOS14 (available [here](https://drive.google.com/open?id=1SuyUdug6bb5HG0rnpDkdyIVdVp119LcV))
-and ActivityNet1.2 ([here](https://drive.google.com/open?id=1zwdF72z_y5TWAAHyZyMVcU6Bz_KFv5oL)). 
+We provide extracted features and corresponsing annotations for THUMOS14 ([Google Drive](https://drive.google.com/open?id=1SuyUdug6bb5HG0rnpDkdyIVdVp119LcV) or [Baidu Wangpan](https://pan.baidu.com/s/1Il8GiqdXpDRbK4W4T28tsQ) (pwd: pvfj))
+and ActivityNet1.2 ([Google Drive](https://drive.google.com/open?id=1zwdF72z_y5TWAAHyZyMVcU6Bz_KFv5oL) or [Baidu Wangpan](https://pan.baidu.com/s/1chPVJXffelDJ9h4WSi5riQ) (pwd: zhqy)). 
 
-Before running the code, please download the target dataset and unzip it under `/data`.
+Before running the code, please download the target dataset and unzip it under `data/`.
 
 ## Running
 You can train your own model by running:
