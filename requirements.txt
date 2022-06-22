@@ -4,7 +4,7 @@ easydict==1.9
 joblib==0.14.1
 kiwisolver==1.1.0
 matplotlib==3.2.0
-numpy==1.18.1
+numpy==1.22.0
 pandas==1.0.1
 Pillow==7.0.0
 pyparsing==2.4.6
