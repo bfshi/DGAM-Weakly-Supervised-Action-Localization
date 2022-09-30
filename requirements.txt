@@ -1,7 +1,7 @@
 certifi==2019.11.28
 cycler==0.10.0
 easydict==1.9
-joblib==0.14.1
+joblib==1.2.0
 kiwisolver==1.1.0
 matplotlib==3.2.0
 numpy==1.18.1
